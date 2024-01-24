@@ -5,4 +5,5 @@ FROM photon:latest
 RUN \
     --mount=type=cache,target=/var/cache/tdnf \
     tdnf check-update ; \
-    tdnf update --allowerasing --asumeyes ; \
+    tdnf update -y --allowerasing ; \
+    tdnf clean all
