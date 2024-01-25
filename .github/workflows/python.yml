@@ -1,8 +1,10 @@
-name: python-performance
+name: Python Performance Benchmark
+
 on:
   push:
     branches:
       - main
+
 env:
   benchmark_list: deepcopy, float
 
@@ -10,15 +12,23 @@ jobs:
   build-and-scan:
     runs-on: ubuntu-latest
     container: alpine:latest
-    steps:
-      - name: Install bash
-        run: apk update && apk add bash
 
-      - name: Install Python and dependencies
-        run: apk add python3 py3-pip gcc musl-dev python3-dev linux-headers
+    steps:
+      - name: Install system dependencies
+        run: apk update && apk add bash python3 py3-pip gcc musl-dev python3-dev linux-headers
+
+      - name: Setup Python Virtual Environment
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
 
       - name: Install pyperformance
-        run: python3 -m pip install pyperformance
+        run: |
+          source venv/bin/activate
+          pip install --no-cache-dir pyperformance
 
-      - name: Run pyperformance
-        run: python3 -m pyperformance run --affinity=1 --benchmark=${{ env.benchmark_list }}
+      - name: Run pyperformance benchmarks
+        run: |
+          source venv/bin/activate
+          pyperformance run --affinity=1 --benchmark=${{ env.benchmark_list }}
+
