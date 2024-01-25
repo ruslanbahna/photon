@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  benchmark_list: deepcopy, float
+  benchmark_list: deepcopy,float,python_startup
 
 jobs:
   build-and-scan:
